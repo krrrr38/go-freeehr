@@ -13,7 +13,7 @@ package main
 
 import (
 	"context"
-	"path/to/go-freeehr/freeehr"
+	"github.com/krrrr38/go-freeehr/freeehr"
 	"golang.org/x/oauth2"
 
 	"os"

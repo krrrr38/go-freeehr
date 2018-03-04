@@ -21,23 +21,23 @@ type Employee struct {
 
 // BreakRecord represents break time
 type BreakRecord struct {
-	ClockInAt  string `json:"clock_in_at,omitempty"`
-	ClockOutAt string `json:"clock_out_at,omitempty"`
+	ClockInAt  FreeeDateTime `json:"clock_in_at,omitempty"`
+	ClockOutAt FreeeDateTime `json:"clock_out_at,omitempty"`
 }
 
 // WorkRecord represents work record by date
 type WorkRecord struct {
 	BreakRecords                []BreakRecord `json:"break_records,omitempty"`
-	ClockInAt                   string        `json:"clock_in_at,omitempty"`
-	ClockOutAt                  string        `json:"clock_out_at,omitempty"`
-	Date                        string        `json:"date,omitempty"`
+	ClockInAt                   FreeeDateTime `json:"clock_in_at,omitempty"`
+	ClockOutAt                  FreeeDateTime `json:"clock_out_at,omitempty"`
+	Date                        FreeeDateTime `json:"date,omitempty"`
 	DayPattern                  string        `json:"day_pattern,omitempty"`
 	EarlyLeavingMins            int           `json:"early_leaving_mins,omitempty"`
 	IsAbsence                   bool          `json:"is_absence,omitempty"`
 	IsEditable                  bool          `json:"is_editable,omitempty"`
 	LatenessMins                int           `json:"lateness_mins,omitempty"`
-	NormalWorkClockInAt         string        `json:"normal_work_clock_in_at,omitempty"`
-	NormalWorkClockOutAt        string        `json:"normal_work_clock_out_at,omitempty"`
+	NormalWorkClockInAt         FreeeDateTime `json:"normal_work_clock_in_at,omitempty"`
+	NormalWorkClockOutAt        FreeeDateTime `json:"normal_work_clock_out_at,omitempty"`
 	NormalWorkMins              int           `json:"normal_work_mins,omitempty"`
 	NormalWorkMinsByPaidHoliday int           `json:"normal_work_mins_by_paid_holiday,omitempty"`
 	Note                        string        `json:"note,omitempty"`
@@ -48,8 +48,8 @@ type WorkRecord struct {
 
 // GetWorkRecord can fetch target date work record
 // https://www.freee.co.jp/hr/api/#/%E5%8B%A4%E6%80%A0/show2
-func (s *EmployeeService) GetWorkRecord(ctx context.Context, employeeID int, date string) (*WorkRecord, *Response, error) {
-	path := fmt.Sprintf("/hr/api/v1/employees/%v/work_records/%v", employeeID, date)
+func (s *EmployeeService) GetWorkRecord(ctx context.Context, employeeID int, date FreeeDate) (*WorkRecord, *Response, error) {
+	path := fmt.Sprintf("/hr/api/v1/employees/%d/work_records/%s", employeeID, date)
 	req, err := s.client.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, nil, err
@@ -66,8 +66,8 @@ func (s *EmployeeService) GetWorkRecord(ctx context.Context, employeeID int, dat
 
 // PutWorkRecord can register/overwrite target date work record
 // https://www.freee.co.jp/hr/api/#/%E5%8B%A4%E6%80%A0/update
-func (s *EmployeeService) PutWorkRecord(ctx context.Context, employeeID int, date string, workRecord *WorkRecord) (*WorkRecord, *Response, error) {
-	path := fmt.Sprintf("/hr/api/v1/employees/%v/work_records/%v", employeeID, date)
+func (s *EmployeeService) PutWorkRecord(ctx context.Context, employeeID int, date FreeeDate, workRecord *WorkRecord) (*WorkRecord, *Response, error) {
+	path := fmt.Sprintf("/hr/api/v1/employees/%d/work_records/%s", employeeID, date)
 	req, err := s.client.NewRequest("PUT", path, workRecord)
 	if err != nil {
 		return nil, nil, err
@@ -83,8 +83,8 @@ func (s *EmployeeService) PutWorkRecord(ctx context.Context, employeeID int, dat
 }
 
 // DeleteWorkRecord https://www.freee.co.jp/hr/api/#/%E5%8B%A4%E6%80%A0/destroy
-func (s *EmployeeService) DeleteWorkRecord(ctx context.Context, employeeID int, date string) error {
-	path := fmt.Sprintf("/hr/api/v1/employees/%v/work_records/%v", employeeID, date)
+func (s *EmployeeService) DeleteWorkRecord(ctx context.Context, employeeID int, date FreeeDate) error {
+	path := fmt.Sprintf("/hr/api/v1/employees/%d/work_records/%s", employeeID, date)
 	req, err := s.client.NewRequest("DELETE", path, nil)
 	if err != nil {
 		return err
