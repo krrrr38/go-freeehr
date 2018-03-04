@@ -10,13 +10,13 @@ type EmployeeService service
 
 // Employee is company employee
 type Employee struct {
-	ID          int    `json:"id,omitempty"`
-	Num         string `json:"num,omitempty"`
-	DisplayName string `json:"display_name,omitempty"`
-	EntryDate   string `json:"entry_date,omitempty"`
-	RetireDate  string `json:"retire_date,omitempty"`
-	UserID      int    `json:"user_id,omitempty"`
-	Email       int    `json:"email,omitempty"`
+	ID          int           `json:"id,omitempty"`
+	Num         string        `json:"num,omitempty"`
+	DisplayName string        `json:"display_name,omitempty"`
+	EntryDate   FreeeDateTime `json:"entry_date,omitempty"`
+	RetireDate  FreeeDateTime `json:"retire_date,omitempty"`
+	UserID      int           `json:"user_id,omitempty"`
+	Email       int           `json:"email,omitempty"`
 }
 
 // BreakRecord represents break time
