@@ -4,23 +4,24 @@ import (
 	"context"
 )
 
-// TODO
+// UserService manage employee related resources
 type UserService service
 
-// TODO
+// User represends freee hr user
 type User struct {
-	Id        *int          `json:"id,omitempty"`
+	ID        int           `json:"id,omitempty"`
 	Companies []UserCompany `json:"companies,omitempty"`
 }
 
-// TODO
+// UserCompany represends user related company information
 type UserCompany struct {
-	Id         *int    `json:"id,omitempty"`
-	Name       *string `json:"name,omitempty"`
-	Role       *string `json:"role,omitempty"`
-	EmployeeId *int    `json:"employee_id,omitempty"`
+	ID         int    `json:"id,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Role       string `json:"role,omitempty"`
+	EmployeeID int    `json:"employee_id,omitempty"`
 }
 
+// GetMe return access token user information
 // https://www.freee.co.jp/hr/api/#/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%83%A6%E3%83%BC%E3%82%B6/show1
 func (s *UserService) GetMe(ctx context.Context) (*User, *Response, error) {
 	req, err := s.client.NewRequest("GET", "/hr/api/v1/users/me", nil)

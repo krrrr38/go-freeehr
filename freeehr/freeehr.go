@@ -10,10 +10,11 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 const (
-	defaultBaseURL = "http://api.freee.co.jp"
+	defaultBaseURL = "https://api.freee.co.jp"
 	userAgent      = "go-freeehr"
 
 	headerRateLimitLimit     = "X-Ratelimit-Limit"
@@ -21,7 +22,7 @@ const (
 	headerRateLimitReset     = "X-Ratelimit-Reset"
 )
 
-// TODO
+// Client is freee hr api client
 type Client struct {
 	client    *http.Client
 	BaseURL   *url.URL
@@ -34,12 +35,12 @@ type Client struct {
 	common service
 }
 
-// TODO
 type service struct {
 	client *Client
 }
 
-// TODO
+// NewClient generate freee hr api client
+// generally httpClient requires OAuth2 context
 func NewClient(httpClient *http.Client) (*Client, error) {
 	if httpClient == nil {
 		return nil, fmt.Errorf("httpClient required")
@@ -54,7 +55,7 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 	return c, nil
 }
 
-// TODO
+// NewRequest build freee hr api http request
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 	u, err := c.BaseURL.Parse(urlStr)
 	if err != nil {
@@ -87,20 +88,20 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	return req, nil
 }
 
-// TODO
+// Response represents raw freee hr api response
 type Response struct {
 	*http.Response
 	RateLimit *RateLimit
 }
 
-// TODO
+// RateLimit represents freee hr api rate limit
 type RateLimit struct {
 	Limit     int
 	Remaining int
 	Reset     string
 }
 
-// TODO
+// Do execute http request call
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
 	resp, err := c.client.Do(req.WithContext(ctx))
 	if err != nil {
@@ -111,6 +112,11 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 		io.CopyN(ioutil.Discard, resp.Body, 512)
 		resp.Body.Close()
 	}()
+
+	err = checkResponse(resp)
+	if err != nil {
+		return nil, err
+	}
 
 	response := newResponse(resp)
 
@@ -128,14 +134,24 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 	return response, err
 }
 
-// TODO
+func checkResponse(r *http.Response) error {
+	if c := r.StatusCode; 200 <= c && c <= 299 {
+		return nil
+	}
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err == nil && data != nil {
+		return fmt.Errorf("api error: status=%v, body=%v", r.StatusCode, string(data))
+	}
+	return fmt.Errorf("api error: status=%v", r.StatusCode)
+}
+
 func newResponse(res *http.Response) *Response {
 	response := &Response{Response: res}
 	response.RateLimit = parseRateLimit(res)
 	return response
 }
 
-// TODO
 func parseRateLimit(r *http.Response) *RateLimit {
 	var rateLimit RateLimit
 	if limit := r.Header.Get(headerRateLimitLimit); limit != "" {
@@ -148,4 +164,22 @@ func parseRateLimit(r *http.Response) *RateLimit {
 		rateLimit.Reset = reset
 	}
 	return &rateLimit
+}
+
+// PagingOption manages freee hr api paging
+type PagingOption struct {
+	Per  int
+	Page int
+}
+
+// AddPagingQueryParam handles url path with paging query parameters
+func AddPagingQueryParam(path string, pagingOption *PagingOption) string {
+	if pagingOption == nil {
+		return path
+	}
+
+	if strings.Contains(path, "?") {
+		return fmt.Sprintf("%s&per=%d&page=%d", path, pagingOption.Per, pagingOption.Page)
+	}
+	return fmt.Sprintf("%s?per=%d&page=%d", path, pagingOption.Per, pagingOption.Page)
 }

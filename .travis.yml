@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+language: go
+go:
+  - 1.9.x
+  - 1.8.x
+env:
+  global:
+    - PATH=/home/travis/gopath/bin:$PATH DEBIAN_FRONTEND=noninteractive
+script:
+  - make lint
+  - make vet
+  - test `gofmt -l . | wc -l` = 0
+  - make test
