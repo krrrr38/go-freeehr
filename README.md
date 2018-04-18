@@ -9,28 +9,29 @@ go api client for [freee HR](https://www.freee.co.jp/hr/).
 ## Usage
 
 ```go
-package main
-
-import (
-	"context"
-	"github.com/krrrr38/go-freeehr/freeehr"
-	"golang.org/x/oauth2"
-
-	"os"
-)
-
 func main() {
-	accessToken := os.Getenv("FREEE_ACCESS_TOKEN")
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: accessToken},
-	)
-	ctx := context.Background()
-	tc := oauth2.NewClient(ctx, ts)
+	....
+	url := conf.AuthCodeURL("state", oauth2.AccessTypeOffline)
+	fmt.Printf("Visit the URL for the auth dialog: %v\nEnter code: ", url)
 
-	client, _ := freeehr.NewClient(tc)
+	var code string
+	if _, err := fmt.Scan(&code); err != nil {
+		log.Fatal(err)
+	}
 
-	// get access token user information
-	userResponse, resp, err := client.Users.GetMe(ctx)
+	fmt.Printf("code: %v\n", code)
+
+	token, err := conf.Exchange(oauth2.NoContext, code) // get access token and so on
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("access token: %v\n", token)
+
+	client, _ := freeehr.NewClient(conf.Client(oauth2.NoContext, token))
+
+	// get user information
+	userResponse, resp, err := client.Users.GetMe()
 }
 ```
 
