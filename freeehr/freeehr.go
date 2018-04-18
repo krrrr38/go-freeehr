@@ -2,7 +2,6 @@ package freeehr
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -102,8 +101,12 @@ type RateLimit struct {
 }
 
 // Do execute http request call
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
-	resp, err := c.client.Do(req.WithContext(ctx))
+func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
+	if DebugEnable() {
+		fmt.Printf("> Send request: %v\n", req)
+	}
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -143,6 +146,7 @@ func checkResponse(r *http.Response) error {
 	if err == nil && data != nil {
 		return fmt.Errorf("api error: status=%v, body=%v", r.StatusCode, string(data))
 	}
+
 	return fmt.Errorf("api error: status=%v", r.StatusCode)
 }
 

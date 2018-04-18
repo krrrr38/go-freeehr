@@ -9,7 +9,7 @@ import (
 
 const (
 	timeTestStrDate     = "2018-03-05"
-	timeTestStrDateTime = "2018-03-04T06:31:09.895Z"
+	timeTestStrDateTime = "2018-03-04T06:31:09.895+09:00"
 )
 
 var (

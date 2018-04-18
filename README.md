@@ -36,7 +36,7 @@ func main() {
 
 ## Example
 
-- `FREEE_ACCESS_TOKEN=${your_access_token} go run example/user/main.go`
+- `FREEE_CLIENT_ID=${YOUR_APP_ID} FREEE_CLIENT_SECRET=${YOUR_SECRET} go run example/user/main.go`
   - if yo do not have access token, see [document](https://support.freee.co.jp/hc/ja/articles/115000145263-freee-API%E3%81%AE%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%83%88%E3%83%BC%E3%82%AF%E3%83%B3%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B).
 
 ## Development

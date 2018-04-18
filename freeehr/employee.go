@@ -1,7 +1,6 @@
 package freeehr
 
 import (
-	"context"
 	"fmt"
 )
 
@@ -30,7 +29,7 @@ type WorkRecord struct {
 	BreakRecords                []BreakRecord `json:"break_records,omitempty"`
 	ClockInAt                   FreeeDateTime `json:"clock_in_at,omitempty"`
 	ClockOutAt                  FreeeDateTime `json:"clock_out_at,omitempty"`
-	Date                        FreeeDateTime `json:"date,omitempty"`
+	Date                        FreeeDate     `json:"date,omitempty"`
 	DayPattern                  string        `json:"day_pattern,omitempty"`
 	EarlyLeavingMins            int           `json:"early_leaving_mins,omitempty"`
 	IsAbsence                   bool          `json:"is_absence,omitempty"`
@@ -41,14 +40,14 @@ type WorkRecord struct {
 	NormalWorkMins              int           `json:"normal_work_mins,omitempty"`
 	NormalWorkMinsByPaidHoliday int           `json:"normal_work_mins_by_paid_holiday,omitempty"`
 	Note                        string        `json:"note,omitempty"`
-	PaidHoliday                 int           `json:"paid_holiday,omitempty"`
+	PaidHoliday                 float64       `json:"paid_holiday,omitempty"`
 	UseAttendanceDeduction      bool          `json:"use_attendance_deduction,omitempty"`
 	UseDefaultWorkPattern       bool          `json:"use_default_work_pattern,omitempty"`
 }
 
 // GetWorkRecord can fetch target date work record
 // https://www.freee.co.jp/hr/api/#/%E5%8B%A4%E6%80%A0/show2
-func (s *EmployeeService) GetWorkRecord(ctx context.Context, employeeID int, date FreeeDate) (*WorkRecord, *Response, error) {
+func (s *EmployeeService) GetWorkRecord(employeeID int, date FreeeDate) (*WorkRecord, *Response, error) {
 	path := fmt.Sprintf("/hr/api/v1/employees/%d/work_records/%s", employeeID, date)
 	req, err := s.client.NewRequest("GET", path, nil)
 	if err != nil {
@@ -56,7 +55,7 @@ func (s *EmployeeService) GetWorkRecord(ctx context.Context, employeeID int, dat
 	}
 
 	workRecordResponse := new(WorkRecord)
-	resp, err := s.client.Do(ctx, req, workRecordResponse)
+	resp, err := s.client.Do(req, workRecordResponse)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -66,7 +65,7 @@ func (s *EmployeeService) GetWorkRecord(ctx context.Context, employeeID int, dat
 
 // PutWorkRecord can register/overwrite target date work record
 // https://www.freee.co.jp/hr/api/#/%E5%8B%A4%E6%80%A0/update
-func (s *EmployeeService) PutWorkRecord(ctx context.Context, employeeID int, date FreeeDate, workRecord *WorkRecord) (*WorkRecord, *Response, error) {
+func (s *EmployeeService) PutWorkRecord(employeeID int, date FreeeDate, workRecord *WorkRecord) (*WorkRecord, *Response, error) {
 	path := fmt.Sprintf("/hr/api/v1/employees/%d/work_records/%s", employeeID, date)
 	req, err := s.client.NewRequest("PUT", path, workRecord)
 	if err != nil {
@@ -74,7 +73,7 @@ func (s *EmployeeService) PutWorkRecord(ctx context.Context, employeeID int, dat
 	}
 
 	workRecordResponse := new(WorkRecord)
-	resp, err := s.client.Do(ctx, req, workRecordResponse)
+	resp, err := s.client.Do(req, workRecordResponse)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -83,14 +82,14 @@ func (s *EmployeeService) PutWorkRecord(ctx context.Context, employeeID int, dat
 }
 
 // DeleteWorkRecord https://www.freee.co.jp/hr/api/#/%E5%8B%A4%E6%80%A0/destroy
-func (s *EmployeeService) DeleteWorkRecord(ctx context.Context, employeeID int, date FreeeDate) error {
+func (s *EmployeeService) DeleteWorkRecord(employeeID int, date FreeeDate) error {
 	path := fmt.Sprintf("/hr/api/v1/employees/%d/work_records/%s", employeeID, date)
 	req, err := s.client.NewRequest("DELETE", path, nil)
 	if err != nil {
 		return err
 	}
 
-	_, err = s.client.Do(ctx, req, nil)
+	_, err = s.client.Do(req, nil)
 	if err != nil {
 		return err
 	}

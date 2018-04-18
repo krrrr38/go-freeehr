@@ -1,7 +1,6 @@
 package freeehr
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -20,10 +19,10 @@ func TestCompanyService_GetEmployees(t *testing.T) {
 
 	mux.HandleFunc("/hr/api/v1/companies/999/employees", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `[{"id":100,"num":"numnum","display_name":"displayname","entry_date": "2018-03-04T06:38:11.261Z","retire_date":"2018-03-04T06:38:11.262Z","user_id":200,"email":300}]`)
+		fmt.Fprint(w, `[{"id":100,"num":"numnum","display_name":"displayname","entry_date": "2018-03-04T06:38:11.261+09:00","retire_date":"2018-03-04T06:38:11.262+09:00","user_id":200,"email":300}]`)
 	})
 
-	employees, _, err := client.Companies.GetEmployees(context.Background(), 999, nil)
+	employees, _, err := client.Companies.GetEmployees(999, nil)
 	if err != nil {
 		t.Errorf("Companies.GetEmployees returned error: %v", err)
 	}
@@ -57,10 +56,10 @@ func TestCompanyService_GetEmployees_Paging(t *testing.T) {
 		}
 
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `[{"id":111,"num":"numnum","display_name":"displayname","entry_date": "2018-03-04T06:38:11.261Z","retire_date":"2018-03-04T06:38:11.262Z","user_id":222,"email":333}]`)
+		fmt.Fprint(w, `[{"id":111,"num":"numnum","display_name":"displayname","entry_date": "2018-03-04T06:38:11.261+09:00","retire_date":"2018-03-04T06:38:11.262+09:00","user_id":222,"email":333}]`)
 	})
 
-	employees, _, err := client.Companies.GetEmployees(context.Background(), 999, &PagingOption{Per: 10, Page: 2})
+	employees, _, err := client.Companies.GetEmployees(999, &PagingOption{Per: 10, Page: 2})
 	if err != nil {
 		t.Errorf("Companies.GetEmployees returned error: %v", err)
 	}

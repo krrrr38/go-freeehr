@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	dateTimeJSONFormat = `"2006-01-02T15:04:05.999Z"`
-	dateTimeStrFormat  = "2006-01-02T15:04:05.999Z"
+	dateTimeJSONFormat = `"2006-01-02T15:04:05.000+09:00"`
+	dateTimeStrFormat  = "2006-01-02T15:04:05.000+09:00"
 	dateJSONFormat     = `"2006-01-02"`
 	dateStrFormat      = "2006-01-02"
 )
@@ -19,6 +19,11 @@ type FreeeDateTime struct {
 // Equal represents FreeeDateTime equality
 func (t FreeeDateTime) Equal(u FreeeDateTime) bool {
 	return t.Time.Equal(u.Time)
+}
+
+// MarshalJSON represents FreeeDateTime json marshal process
+func (t FreeeDateTime) MarshalJSON() ([]byte, error) {
+	return []byte(t.Time.Format(dateTimeJSONFormat)), nil
 }
 
 // UnmarshalJSON represents FreeeDateTime json un-marshal process

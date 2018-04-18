@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"time"
 )
 
 func main() {
@@ -18,6 +20,11 @@ func main() {
 	if clientSecret == "" {
 		log.Fatal("FREEE_CLIENT_SECRET env variable not found")
 	}
+	employeeID, err := strconv.Atoi(os.Getenv("EMPLOYEE_ID")) // 294712
+	if err != nil {
+		log.Fatal("EMPLOYEE_ID env variable parse failed", err)
+	}
+
 	conf := freeehr.Conf(clientID, clientSecret, "urn:ietf:wg:oauth:2.0:oob")
 
 	url := conf.AuthCodeURL("state", oauth2.AccessTypeOffline)
@@ -40,12 +47,12 @@ func main() {
 	client, _ := freeehr.NewClient(conf.Client(oauth2.NoContext, token))
 
 	// get access token user information
-	userResponse, resp, err := client.Users.GetMe()
+	workRecords, resp, err := client.Employees.GetWorkRecord(employeeID, freeehr.FreeeDate{time.Now().AddDate(0, 0, -1)})
 
 	fmt.Printf("resp: %v\n", resp)
 	if err != nil {
 		fmt.Printf("got error: %v\n", err)
 	} else {
-		fmt.Printf("got user: %v\n", userResponse)
+		fmt.Printf("got workRecords: %v\n", workRecords)
 	}
 }

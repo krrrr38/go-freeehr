@@ -1,7 +1,6 @@
 package freeehr
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -17,7 +16,7 @@ func TestUserService_GetMe(t *testing.T) {
 		fmt.Fprint(w, `{"id":100,"companies": [{"id":200,"name":"namename","role": "rolerole","employee_id":300}]}`)
 	})
 
-	user, _, err := client.Users.GetMe(context.Background())
+	user, _, err := client.Users.GetMe()
 	if err != nil {
 		t.Errorf("Users.GetMe returned error: %v", err)
 	}
