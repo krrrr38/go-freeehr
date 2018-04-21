@@ -23,7 +23,7 @@ func TestEmployeeService_GetWorkRecord(t *testing.T) {
 	mux.HandleFunc("/hr/api/v1/employees/999/work_records/2018-03-04", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		// {"break_records":[{"clock_in_at":"2018-04-18T12:00:00.000+09:00","clock_out_at":"2018-04-18T13:00:00.000+09:00"}],"clock_in_at":"2018-04-18T09:50:00.000+09:00","clock_out_at":"2018-04-18T21:37:00.000+09:00","date":"2018-04-18","day_pattern":"normal_day","early_leaving_mins":0,"is_absence":false,"is_editable":true,"lateness_mins":0,"normal_work_clock_in_at":"2018-04-18T08:45:00.000+09:00","normal_work_clock_out_at":"2018-04-18T17:45:00.000+09:00","normal_work_mins":480,"normal_work_mins_by_paid_holiday":0,"note":"","paid_holiday":0.0,"use_attendance_deduction":false,"use_default_work_pattern":true}
-		fmt.Fprint(w, `{"break_records":[{"clock_in_at":"2018-03-04T06:31:09.895+09:00","clock_out_at":"2018-03-04T06:31:09.895+09:00"}],"clock_in_at":"2018-03-04T06:31:09.895+09:00","clock_out_at":"2018-03-04T06:31:09.895+09:00","date":"2018-03-04","day_pattern":"string","early_leaving_mins":0,"is_absence":true,"is_editable":true,"lateness_mins":0,"normal_work_clock_in_at":"2018-03-04T06:31:09.895+09:00","normal_work_clock_out_at":"2018-03-04T06:31:09.895+09:00","normal_work_mins":0,"normal_work_mins_by_paid_holiday":0,"note":"string","paid_holiday":0.0,"use_attendance_deduction":true,"use_default_work_pattern":true}`)
+		fmt.Fprint(w, `{"break_records":[{"clock_in_at":"2018-03-04T06:31:09.895+09:00","clock_out_at":null}],"clock_in_at":"2018-03-04T06:31:09.895+09:00","clock_out_at":"2018-03-04T06:31:09.895+09:00","date":"2018-03-04","day_pattern":"string","early_leaving_mins":0,"is_absence":true,"is_editable":true,"lateness_mins":0,"normal_work_clock_in_at":"2018-03-04T06:31:09.895+09:00","normal_work_clock_out_at":"2018-03-04T06:31:09.895+09:00","normal_work_mins":0,"normal_work_mins_by_paid_holiday":0,"note":"string","paid_holiday":0.0,"use_attendance_deduction":true,"use_default_work_pattern":true}`)
 	})
 
 	workRecord, _, err := client.Employees.GetWorkRecord(999, FreeeDate{employeeTestDate0304})
@@ -34,20 +34,20 @@ func TestEmployeeService_GetWorkRecord(t *testing.T) {
 	want := &WorkRecord{
 		BreakRecords: []BreakRecord{
 			BreakRecord{
-				ClockInAt:  FreeeDateTime{employeeTestDateTime},
-				ClockOutAt: FreeeDateTime{employeeTestDateTime},
+				ClockInAt:  &FreeeDateTime{employeeTestDateTime},
+				ClockOutAt: nil,
 			},
 		},
-		ClockInAt:                   FreeeDateTime{employeeTestDateTime},
-		ClockOutAt:                  FreeeDateTime{employeeTestDateTime},
-		Date:                        FreeeDate{employeeTestDate0304},
+		ClockInAt:                   &FreeeDateTime{employeeTestDateTime},
+		ClockOutAt:                  &FreeeDateTime{employeeTestDateTime},
+		Date:                        &FreeeDate{employeeTestDate0304},
 		DayPattern:                  "string",
 		EarlyLeavingMins:            0,
 		IsAbsence:                   true,
 		IsEditable:                  true,
 		LatenessMins:                0,
-		NormalWorkClockInAt:         FreeeDateTime{employeeTestDateTime},
-		NormalWorkClockOutAt:        FreeeDateTime{employeeTestDateTime},
+		NormalWorkClockInAt:         &FreeeDateTime{employeeTestDateTime},
+		NormalWorkClockOutAt:        &FreeeDateTime{employeeTestDateTime},
 		NormalWorkMins:              0,
 		NormalWorkMinsByPaidHoliday: 0,
 		Note:                   "string",
@@ -67,20 +67,20 @@ func TestEmployeeService_PutWorkRecord(t *testing.T) {
 	input := &WorkRecord{
 		BreakRecords: []BreakRecord{
 			BreakRecord{
-				ClockInAt:  FreeeDateTime{employeeTestDateTime},
-				ClockOutAt: FreeeDateTime{employeeTestDateTime},
+				ClockInAt:  &FreeeDateTime{employeeTestDateTime},
+				ClockOutAt: nil,
 			},
 		},
-		ClockInAt:                   FreeeDateTime{employeeTestDateTime},
-		ClockOutAt:                  FreeeDateTime{employeeTestDateTime},
-		Date:                        FreeeDate{employeeTestDate0304},
+		ClockInAt:                   &FreeeDateTime{employeeTestDateTime},
+		ClockOutAt:                  &FreeeDateTime{employeeTestDateTime},
+		Date:                        &FreeeDate{employeeTestDate0304},
 		DayPattern:                  "string",
 		EarlyLeavingMins:            0,
 		IsAbsence:                   true,
 		IsEditable:                  true,
 		LatenessMins:                0,
-		NormalWorkClockInAt:         FreeeDateTime{employeeTestDateTime},
-		NormalWorkClockOutAt:        FreeeDateTime{employeeTestDateTime},
+		NormalWorkClockInAt:         &FreeeDateTime{employeeTestDateTime},
+		NormalWorkClockOutAt:        &FreeeDateTime{employeeTestDateTime},
 		NormalWorkMins:              0,
 		NormalWorkMinsByPaidHoliday: 0,
 		Note:                   "string",
@@ -110,7 +110,7 @@ func TestEmployeeService_PutWorkRecord(t *testing.T) {
 	want := &WorkRecord{
 		BreakRecords: []BreakRecord{
 			BreakRecord{
-				ClockInAt: FreeeDateTime{employeeTestDateTime},
+				ClockInAt: &FreeeDateTime{employeeTestDateTime},
 			},
 		},
 	}

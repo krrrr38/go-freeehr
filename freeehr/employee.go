@@ -20,29 +20,29 @@ type Employee struct {
 
 // BreakRecord represents break time
 type BreakRecord struct {
-	ClockInAt  FreeeDateTime `json:"clock_in_at,omitempty"`
-	ClockOutAt FreeeDateTime `json:"clock_out_at,omitempty"`
+	ClockInAt  *FreeeDateTime `json:"clock_in_at,omitempty"`
+	ClockOutAt *FreeeDateTime `json:"clock_out_at,omitempty"`
 }
 
 // WorkRecord represents work record by date
 type WorkRecord struct {
-	BreakRecords                []BreakRecord `json:"break_records,omitempty"`
-	ClockInAt                   FreeeDateTime `json:"clock_in_at,omitempty"`
-	ClockOutAt                  FreeeDateTime `json:"clock_out_at,omitempty"`
-	Date                        FreeeDate     `json:"date,omitempty"`
-	DayPattern                  string        `json:"day_pattern,omitempty"`
-	EarlyLeavingMins            int           `json:"early_leaving_mins,omitempty"`
-	IsAbsence                   bool          `json:"is_absence,omitempty"`
-	IsEditable                  bool          `json:"is_editable,omitempty"`
-	LatenessMins                int           `json:"lateness_mins,omitempty"`
-	NormalWorkClockInAt         FreeeDateTime `json:"normal_work_clock_in_at,omitempty"`
-	NormalWorkClockOutAt        FreeeDateTime `json:"normal_work_clock_out_at,omitempty"`
-	NormalWorkMins              int           `json:"normal_work_mins,omitempty"`
-	NormalWorkMinsByPaidHoliday int           `json:"normal_work_mins_by_paid_holiday,omitempty"`
-	Note                        string        `json:"note,omitempty"`
-	PaidHoliday                 float64       `json:"paid_holiday,omitempty"`
-	UseAttendanceDeduction      bool          `json:"use_attendance_deduction,omitempty"`
-	UseDefaultWorkPattern       bool          `json:"use_default_work_pattern,omitempty"`
+	BreakRecords                []BreakRecord  `json:"break_records,omitempty"`
+	ClockInAt                   *FreeeDateTime `json:"clock_in_at,omitempty"`
+	ClockOutAt                  *FreeeDateTime `json:"clock_out_at,omitempty"`
+	Date                        *FreeeDate     `json:"date,omitempty"`
+	DayPattern                  string         `json:"day_pattern,omitempty"`
+	EarlyLeavingMins            int            `json:"early_leaving_mins,omitempty"`
+	IsAbsence                   bool           `json:"is_absence,omitempty"`
+	IsEditable                  bool           `json:"is_editable,omitempty"`
+	LatenessMins                int            `json:"lateness_mins,omitempty"`
+	NormalWorkClockInAt         *FreeeDateTime `json:"normal_work_clock_in_at,omitempty"`
+	NormalWorkClockOutAt        *FreeeDateTime `json:"normal_work_clock_out_at,omitempty"`
+	NormalWorkMins              int            `json:"normal_work_mins,omitempty"`
+	NormalWorkMinsByPaidHoliday int            `json:"normal_work_mins_by_paid_holiday,omitempty"`
+	Note                        string         `json:"note,omitempty"`
+	PaidHoliday                 float64        `json:"paid_holiday,omitempty"`
+	UseAttendanceDeduction      bool           `json:"use_attendance_deduction,omitempty"`
+	UseDefaultWorkPattern       bool           `json:"use_default_work_pattern,omitempty"`
 }
 
 // GetWorkRecord can fetch target date work record
