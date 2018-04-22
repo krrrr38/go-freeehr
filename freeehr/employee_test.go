@@ -10,10 +10,11 @@ import (
 )
 
 var (
-	employeeTestDate0304 = time.Date(2018, 3, 4, 0, 0, 0, 0, time.UTC)
-	employeeTestDate0305 = time.Date(2018, 3, 5, 0, 0, 0, 0, time.UTC)
-	employeeTestDate0306 = time.Date(2018, 3, 6, 0, 0, 0, 0, time.UTC)
-	employeeTestDateTime = time.Date(2018, 3, 4, 6, 31, 9, 895000000, time.UTC)
+	employeeTestLoc, _   = time.LoadLocation("Asia/Tokyo")
+	employeeTestDate0304 = time.Date(2018, 3, 4, 0, 0, 0, 0, employeeTestLoc)
+	employeeTestDate0305 = time.Date(2018, 3, 5, 0, 0, 0, 0, employeeTestLoc)
+	employeeTestDate0306 = time.Date(2018, 3, 6, 0, 0, 0, 0, employeeTestLoc)
+	employeeTestDateTime = time.Date(2018, 3, 4, 6, 31, 9, 895000000, employeeTestLoc)
 )
 
 func TestEmployeeService_GetWorkRecord(t *testing.T) {

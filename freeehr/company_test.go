@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	companyTestDateTime1 = time.Date(2018, 3, 4, 6, 38, 11, 261000000, time.UTC)
-	companyTestDateTime2 = time.Date(2018, 3, 4, 6, 38, 11, 262000000, time.UTC)
+	companyTestLoc, _    = time.LoadLocation("Asia/Tokyo")
+	companyTestDateTime1 = time.Date(2018, 3, 4, 6, 38, 11, 261000000, companyTestLoc)
+	companyTestDateTime2 = time.Date(2018, 3, 4, 6, 38, 11, 262000000, companyTestLoc)
 )
 
 func TestCompanyService_GetEmployees(t *testing.T) {

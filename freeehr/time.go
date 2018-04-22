@@ -11,6 +11,8 @@ const (
 	dateStrFormat      = "2006-01-02"
 )
 
+var loc, _ = time.LoadLocation("Asia/Tokyo")
+
 // FreeeDateTime is datetime object for freee api
 type FreeeDateTime struct {
 	time.Time
@@ -29,7 +31,7 @@ func (t FreeeDateTime) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON represents FreeeDateTime json un-marshal process
 func (t *FreeeDateTime) UnmarshalJSON(data []byte) (err error) {
 	str := string(data)
-	(*t).Time, err = time.Parse(dateTimeJSONFormat, str)
+	(*t).Time, err = time.ParseInLocation(dateTimeJSONFormat, str, loc)
 	return
 }
 
@@ -56,6 +58,6 @@ func (t FreeeDate) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON represents FreeeDate json un-marshal process
 func (t *FreeeDate) UnmarshalJSON(data []byte) (err error) {
 	str := string(data)
-	(*t).Time, err = time.Parse(dateJSONFormat, str)
+	(*t).Time, err = time.ParseInLocation(dateJSONFormat, str, loc)
 	return
 }

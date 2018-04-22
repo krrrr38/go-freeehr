@@ -13,8 +13,9 @@ const (
 )
 
 var (
-	timeTestTimeDate     = time.Date(2018, 3, 5, 0, 0, 0, 0, time.UTC)
-	timeTestTimeDateTime = time.Date(2018, 3, 4, 6, 31, 9, 895000000, time.UTC)
+	timeTestLoc, _       = time.LoadLocation("Asia/Tokyo")
+	timeTestTimeDate     = time.Date(2018, 3, 5, 0, 0, 0, 0, timeTestLoc)
+	timeTestTimeDateTime = time.Date(2018, 3, 4, 6, 31, 9, 895000000, timeTestLoc)
 )
 
 func TestFreeeDateTime_Marshal(t *testing.T) {
