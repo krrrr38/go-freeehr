@@ -47,7 +47,7 @@ func main() {
 	client, _ := freeehr.NewClient(conf.Client(oauth2.NoContext, token))
 
 	// get access token user information
-	workRecords, resp, err := client.Employees.GetWorkRecord(employeeID, freeehr.FreeeDate{time.Now().AddDate(0, 0, -1)})
+	workRecords, resp, err := client.Employees.GetWorkRecord(employeeID, freeehr.FreeeDate{time.Now().AddDate(0, 0, 2)})
 
 	fmt.Printf("resp: %v\n", resp)
 	if err != nil {
